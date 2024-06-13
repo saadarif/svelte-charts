@@ -151,7 +151,7 @@
 		y={yKey}
 		z={zKey}
 		yDomain={$yDomain}
-		xScale={typeof xScale == 'function' ? xScale() : xScale == 'time' ? scaleTime() : scaleLinear()}
+		xScale={typeof xScale == 'function' ? xScale() : xScale == 'log' ? scaleSymlog().constant(10000) : scaleLinear()}
 		yScale={typeof yScale == 'function' ? yScale() : yScale == 'log' ? scaleSymlog() : scaleLinear()}
 		zScale={scaleOrdinal()}
 		zDomain={_zDomain}
