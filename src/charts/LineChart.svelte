@@ -1,7 +1,7 @@
 <svelte:options accessors={true} />
 
 <script>
-	import { LayerCake, Svg } from 'layercake';
+	import { LayerCake, Svg, Html } from 'layercake';
 	import { scaleOrdinal, scaleLinear, scaleSymlog, scaleTime } from 'd3-scale';
  	import { tweened } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
@@ -19,6 +19,10 @@
 	import Labels from './shared/Labels.svelte';
 	import Export from './shared/Export.svelte';
 	import Table from './shared/Table.svelte';
+	import AnnotationsData from '@onsvisual/svelte-charts/src/charts/shared/AnnotationsData.svelte';
+	import Arrows from  '@onsvisual/svelte-charts/src/charts/shared/Arrows.svelte';
+	import ArrowheadDef from '@onsvisual/svelte-charts/src/charts/shared/ArrowheadDef.svelte';
+	
 
   export let data;
 	export let height = 200; // number of pixels or valid css height string
@@ -81,6 +85,9 @@
 	export let highlighted = [];
 	export let colorHighlight = '#206095';
 	export let output = null;
+	export let annotations = [];
+
+	
 
 	let el; // Chart DOM element
 
@@ -168,12 +175,15 @@
 			colorHover,
 			colorHighlight,
       animation,
-      duration
+      duration,
     }}
 	>
+
 		<SetCoords/>
-	  <slot name="back"/>
-		<Svg pointerEvents={interactive}>
+	<slot name="back"/>
+	
+	<Svg pointerEvents={interactive}>
+	 
       {#if xAxis}
 			  <AxisX ticks={xTicks} formatTick={xFormatTick} {snapTicks} prefix={xPrefix} suffix={xSuffix} gridlines={xGridlines} tickMarks={xTickMarks} forceTicks={xForceTicks} formatTickString={xFormatTickString}/>
       {/if}
@@ -185,13 +195,22 @@
       {/if}
       {#if line}
 			  <Line {lineWidth} {select} bind:selected {hover} bind:hovered {highlighted} on:hover on:select/>
+			  
       {/if}
 			{#if labels}
 				<Labels {hovered} {selected} labelAll={labels === "all"} {spreadLabels} marker={labelMarker} textWrap={labelWrap}/>
 			{/if}
 			<slot name="svg"/>
-		</Svg>
+			
+	  </Svg>
+	  <AnnotationsData {annotations}/>
 	  <slot name="front"/>
+	  <Svg pointerEvents={interactive}>
+		<svelte:fragment slot="defs">
+		  <ArrowheadDef/>
+		</svelte:fragment>
+		<Arrows {annotations}/>
+	  </Svg>
 	</LayerCake>
 </div>
 {#if table}
