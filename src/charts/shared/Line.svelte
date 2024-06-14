@@ -91,7 +91,7 @@
 				colorHighlight
 			}"
 			stroke-width="{
-				lineWidth + 1.5
+				lineWidth + 3.0
 			}"
 			use:raiseMe={{disable: hovered !== $data[i][0][idKey]}}
 		/>
